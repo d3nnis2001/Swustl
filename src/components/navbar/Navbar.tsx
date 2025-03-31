@@ -1,27 +1,27 @@
+// src/components/navbar/Navbar.tsx
 import { useCallback } from '@lynx-js/react'
+import { useRouter, Routes } from '../../router.js'
 import Logo from '../../assets/icons/LogoS.png';
 import Profile from '../../assets/icons/ProfileIcon.png';
 import Message from '../../assets/icons/MessageIcon.png';
 
-type NavbarProps = {
-  onRoute1Click?: () => void;
-  onRoute2Click?: () => void;
-}
-
-export function Navbar({ 
-  onRoute1Click,
-  onRoute2Click
-}: NavbarProps) {
+export function Navbar() {
+  const { navigate } = useRouter();
   
-  const handleRoute1Click = useCallback(() => {
+  const handleHomeClick = useCallback(() => {
     'background only'
-    if (onRoute1Click) onRoute1Click()
-  }, [onRoute1Click])
+    navigate(Routes.HOME);
+  }, [navigate])
   
-  const handleRoute2Click = useCallback(() => {
+  const handleProfileClick = useCallback(() => {
     'background only'
-    if (onRoute2Click) onRoute2Click()
-  }, [onRoute2Click])
+    navigate(Routes.PROFILE);
+  }, [navigate])
+  
+  const handleMessagesClick = useCallback(() => {
+    'background only'
+    navigate(Routes.MESSAGES);
+  }, [navigate])
 
   return (
     <view className="p-4 bg-white shadow-md">
@@ -29,16 +29,17 @@ export function Navbar({
         <image 
           src={Profile} 
           className="h-10 w-10"
-          bindtap={handleRoute1Click}
+          bindtap={handleProfileClick}
         />
         <image 
           src={Logo}
           className="w-10 h-10"
+          bindtap={handleHomeClick}
         />
         <image 
           src={Message}
           className="w-8 h-8"
-          bindtap={handleRoute2Click}
+          bindtap={handleMessagesClick}
         />
       </view>
     </view>

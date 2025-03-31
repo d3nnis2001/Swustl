@@ -8,6 +8,7 @@ module.exports = {
   },
   corePlugins: {
     preflight: false,
+    objectFit: false
   },
   plugins: [],
 }

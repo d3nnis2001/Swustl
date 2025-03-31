@@ -13,7 +13,7 @@ interface ProfileInfoProps {
           <text className="text-xl white_color font-bold drop-shadow-lg">{name}</text>
           <text className="ml-2 text-lg white_color drop-shadow-lg">{age}</text>
         </view>
-        <text className=" mt-1 white_color  drop-shadow-lg">{bio}</text>
+        <text className=" mt-1 white_color drop-shadow-lg">{bio}</text>
       </view>
     )
   }
