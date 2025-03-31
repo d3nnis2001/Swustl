@@ -4,26 +4,25 @@ import { type ProfileType, type SwipeDirection, type LynxTouchEvent, type SwipeH
 import { ProfileImageGallery } from './ProfileImageGallery.jsx'
 import { ProfileStatusLabel } from './ProfileStatusLabel.jsx'
 import { ProfileInfo } from './ProfileInfo.jsx'
+import "./Profile.css";
 
 interface ProfileCardProps extends SwipeHandlers {
   profile: ProfileType;
 }
 
-export function ProfileCard({ profile }: ProfileCardProps) {
+export function ProfileCard({ profile, onNext }: ProfileCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
   const [swipeDirection, setSwipeDirection] = useState<SwipeDirection>(null)
   const [startX, setStartX] = useState<number>(0)
   const [offsetX, setOffsetX] = useState<number>(0)
   const [isSwiping, setIsSwiping] = useState<boolean>(false)
 
-  // Registers a touch (potential swipe)
   const onTouchStart = useCallback((e: LynxTouchEvent) => {
     'background only'
     setStartX(e.touches[0].clientX)
     setIsSwiping(true)
   }, [])
   
-  // Checks if the current swipe is a left or right swipe
   const onTouchMove = useCallback((e: LynxTouchEvent) => {
     'background only'
     if (isSwiping) {

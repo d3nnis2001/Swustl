@@ -1,5 +1,6 @@
 import { useCallback } from '@lynx-js/react'
 import { type Dispatch, type SetStateAction } from '@lynx-js/react';
+import "./Profile.css";
 
 interface ProfileImageGalleryProps {
   images: string[];
@@ -49,7 +50,7 @@ export function ProfileImageGallery({ images, currentIndex, onSetCurrentIndex }:
           className="w-10 h-10 bg-white bg-opacity-50 rounded-full flex items-center justify-center ml-2"
           bindtap={prevImage}
         >
-          <text className="text-2xl">&lt;</text>
+          <text className="text-2xl white_color">&lt;</text>
         </view>
       </view>
       
@@ -58,7 +59,7 @@ export function ProfileImageGallery({ images, currentIndex, onSetCurrentIndex }:
           className="w-10 h-10 bg-white bg-opacity-50 rounded-full flex items-center justify-center mr-2"
           bindtap={nextImage}
         >
-          <text className="text-2xl">&gt;</text>
+          <text className="text-2xl white_color">&gt;</text>
         </view>
       </view>
       

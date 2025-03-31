@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  background-color: #faa;
-  --color-text: #fff;
-}
 
-
-text {
-  color: var(--color-text);
-}
 
 

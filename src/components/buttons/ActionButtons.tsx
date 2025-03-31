@@ -1,6 +1,9 @@
 // components/buttons/ActionButtons.tsx
 import { useCallback } from '@lynx-js/react'
-import { SwipeHandlers } from '../../types'
+import { type SwipeHandlers } from '../../types.js'
+import HakenIcon from '../../assets/icons/HakenIcon.png'
+import CrossIcon from '../../assets/icons/CrossIcon.png'
+import "./ActionButtons.css";
 
 export function ActionButtons({ onNext }: SwipeHandlers) {
   const handleNope = useCallback(() => {
@@ -21,24 +24,23 @@ export function ActionButtons({ onNext }: SwipeHandlers) {
   return (
     <view className="flex justify-around">
       <view 
-        className="w-14 h-14 rounded-full bg-white border border-gray-300 shadow-md flex items-center justify-center"
+        className="buttonCircle"
         bindtap={handleNope}
       >
-        <view className="text-3xl text-red-500">✕</view>
+        <image 
+          src={CrossIcon} 
+          className="h-20 w-20"
+        />
       </view>
       
       <view 
-        className="w-12 h-12 rounded-full bg-white border border-gray-300 shadow-md flex items-center justify-center"
-        bindtap={handleSuperLike}
-      >
-        <view className="text-2xl text-blue-500">★</view>
-      </view>
-      
-      <view 
-        className="w-14 h-14 rounded-full bg-white border border-gray-300 shadow-md flex items-center justify-center"
+        className="buttonCircle"
         bindtap={handleLike}
       >
-        <view className="text-3xl text-green-500">♥</view>
+        <image 
+          src={HakenIcon} 
+          className="h-20 w-20"
+        />
       </view>
     </view>
   )

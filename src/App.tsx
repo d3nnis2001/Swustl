@@ -51,17 +51,17 @@ export function App() {
   }
 
   return (
-    <view className="bg-gray-100 w-full h-full">
+    <view className="bg-gray-100 w-full h-full flex flex-col">
       <Navbar />
-      <view className="flex flex-col h-full">
-        <view className="flex-1 flex items-center justify-center p-4">
+      <view className="flex flex-col flex-1">
+        <view className="flex justify-center p-4">
           <ProfileCard 
             profile={currentProfile}
             onNext={handleNext}
           />
         </view>
         
-        <view className="p-4 bg-white shadow-inner">
+        <view className="mt-auto mb-10">
           <ActionButtons onNext={handleNext} />
         </view>
       </view>
