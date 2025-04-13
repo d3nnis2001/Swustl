@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swustl/views/messager/messageMain.dart';
 
 void main() {
   runApp(const MyApp());
@@ -133,6 +134,12 @@ class HomePageState extends State<HomePage> {
                     icon: const Icon(Icons.message, size: 28),
                     onPressed: () {
                       // Navigiere zu Nachrichten
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MessagesPage(),
+                        ),
+                      );
                     },
                   ),
                 ],
