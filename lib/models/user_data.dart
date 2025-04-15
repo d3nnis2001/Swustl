@@ -1,3 +1,5 @@
+import 'package:swustl/models/icebreaker_data.dart';
+
 class UserData {
   // Page 1: Personal Information
   String firstName = '';
@@ -33,6 +35,33 @@ class UserData {
     'stackoverflow': '',
     'medium': '',
   };
+  
+  // Icebreaker-Antworten
+  Map<String, IcebreakerAnswer> icebreakerAnswers = {};
+  
+  // Füge eine neue Antwort hinzu oder aktualisiere eine bestehende
+  void answerIcebreaker(String questionId, String answer) {
+    icebreakerAnswers[questionId] = IcebreakerAnswer(
+      questionId: questionId,
+      answer: answer,
+      answeredAt: DateTime.now(),
+    );
+  }
+
+  // Entferne eine Antwort
+  void removeIcebreakerAnswer(String questionId) {
+    icebreakerAnswers.remove(questionId);
+  }
+
+  // Überprüfen, ob eine bestimmte Frage beantwortet wurde
+  bool hasAnsweredQuestion(String questionId) {
+    return icebreakerAnswers.containsKey(questionId);
+  }
+
+  // Hole eine spezifische Antwort
+  IcebreakerAnswer? getAnswer(String questionId) {
+    return icebreakerAnswers[questionId];
+  }
 }
 
 class Education {

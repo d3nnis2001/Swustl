@@ -229,17 +229,6 @@ class ChatPageState extends State<ChatPage> {
       ),
     );
   }
-  void _reportMessage(Message message) {
-    showDialog(
-      context: context,
-      builder: (context) => ReportDialog(
-        itemId: "${message.senderId}_${message.timestamp.toString()}", // Pseudo ID für die Nachricht
-        itemName: message.text.length > 25 ? "${message.text.substring(0, 25)}..." : message.text,
-        reportType: ReportType.message,
-      ),
-    );
-  }
-
 
   final List<String> _supportedLanguages = [
     'dart', 'javascript', 'python', 'java', 'c', 'cpp', 'csharp',

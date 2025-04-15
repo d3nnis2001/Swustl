@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swustl/views/messager/messageMain.dart';
-import 'package:swustl/views/registration/nameReg.dart';
+import 'package:swustl/views/profile/profile_screen.dart';
 import 'package:swustl/models/user_data.dart';
 import 'package:swustl/views/shared/report_dialog.dart';
 
@@ -137,7 +137,7 @@ class HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RegistrationPage1(userData: UserData()),
+                          builder: (context) => ProfileScreen(userData: UserData()),
                         ),
                       );
                     },
