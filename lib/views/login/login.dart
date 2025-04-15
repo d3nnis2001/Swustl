@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swustl/views/registration/nameReg.dart';
 import 'package:swustl/models/user_data.dart';
 import 'package:swustl/main.dart';
+import 'package:swustl/views/login/forgotPass.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -267,7 +268,12 @@ class _LoginPageState extends State<LoginPage> {
                         // Forgot Password
                         TextButton(
                           onPressed: () {
-                            // Passwort vergessen Logik
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ForgotPasswordPage(),
+                              ),
+                            );
                           },
                           style: TextButton.styleFrom(
                             foregroundColor: Colors.blue,
