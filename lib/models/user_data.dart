@@ -1,4 +1,3 @@
-// user_data.dart
 class UserData {
   // Page 1: Personal Information
   String firstName = '';
@@ -9,6 +8,8 @@ class UserData {
   int birthYear = 0;
   String country = '';
   String phoneNumber = '';
+  String? profileImagePath; // Added for custom profile image
+  String? avatarPath; // Added for predefined avatar selection
   
   // Page 2: Education
   List<Education> education = [];

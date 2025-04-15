@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swustl/views/messager/messageMain.dart';
+import 'package:swustl/views/registration/nameReg.dart';
+import 'package:swustl/models/user_data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -120,7 +122,12 @@ class HomePageState extends State<HomePage> {
                   IconButton(
                     icon: const Icon(Icons.person, size: 28),
                     onPressed: () {
-                      // Navigiere zum Profil
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegistrationPage1(userData: UserData()),
+                        ),
+                      );
                     },
                   ),
                   Image.asset(

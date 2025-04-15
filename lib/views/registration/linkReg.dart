@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:swustl/views/registration/goalsReg.dart';
 import 'package:swustl/models/user_data.dart';
 
 class RegistrationPage6 extends StatefulWidget {

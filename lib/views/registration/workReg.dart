@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:swustl/views/registration/educationReg.dart';
 import 'package:swustl/views/registration/techReg.dart';
 import 'package:swustl/models/user_data.dart';
 
@@ -146,80 +145,86 @@ class _RegistrationPage3State extends State<RegistrationPage3> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar: Container(
         color: Colors.white,
-        elevation: 8,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Progress Indicator
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(6, (index) {
-                  return Container(
-                    width: 40,
-                    height: 4,
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    decoration: BoxDecoration(
-                      color: index <= 2 ? Colors.blue : Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  );
-                }),
-              ),
-              
-              const SizedBox(height: 16),
-              
-              // Navigation Buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.black, backgroundColor: Colors.grey[200],
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.arrow_back, size: 16),
-                        SizedBox(width: 8),
-                        Text('Zurück'),
-                      ],
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Progress Indicator
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(6, (index) {
+                return Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    color: index <= 1 ? Colors.blue : Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                );
+              }),
+            ),
+            
+            const SizedBox(height: 16),
+            
+            // Navigation Buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.grey[200],
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Hier ist keine Validierung nötig, da Berufserfahrung optional ist
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RegistrationPage4(userData: widget.userData),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white, backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Weiter'),
-                        SizedBox(width: 8),
-                        Icon(Icons.arrow_forward, size: 16),
-                      ],
-                    ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.arrow_back, size: 16),
+                      SizedBox(width: 8),
+                      Text('Zurück'),
+                    ],
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // Hier ist keine Validierung nötig, da Ausbildung optional ist
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegistrationPage4(userData: widget.userData),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 2,
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Weiter'),
+                      SizedBox(width: 8),
+                      Icon(Icons.arrow_forward, size: 16),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
