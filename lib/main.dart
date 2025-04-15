@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swustl/views/messager/messageMain.dart';
 import 'package:swustl/views/registration/nameReg.dart';
 import 'package:swustl/models/user_data.dart';
+import 'package:swustl/views/shared/report_dialog.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,12 +28,23 @@ class MyApp extends StatelessWidget {
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+
   @override
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
   int currentImageIndex = 0;
+  void _showReportProjectDialog(BuildContext context, Project project) {
+  showDialog(
+    context: context,
+    builder: (context) => ReportDialog(
+      itemId: project.name, // Da wir keine eigentliche ID haben, verwenden wir den Namen
+      itemName: "${project.name}'s Projekt: ${project.description}",
+      reportType: ReportType.project,
+    ),
+  );
+}
   final List<Project> projects = [
     Project(
       name: "Anna Schmidt",
@@ -236,7 +248,6 @@ class HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            
                             // Project Info Overlay
                             Positioned(
                               top: 0,
@@ -258,22 +269,52 @@ class HomePageState extends State<HomePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          currentProject.name,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              currentProject.name,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              "${currentProject.age}",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 22,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          "${currentProject.age}",
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 22,
-                                          ),
+                                        // Neuer Report-Button
+                                        IconButton(
+                                          icon: const Icon(Icons.more_vert, color: Colors.white),
+                                          onPressed: () {
+                                            showModalBottomSheet(
+                                              context: context,
+                                              shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                              ),
+                                              builder: (context) => Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  ListTile(
+                                                    leading: const Icon(Icons.flag, color: Colors.red),
+                                                    title: const Text('Projekt melden'),
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                      _showReportProjectDialog(context, currentProject);
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ],
                                     ),

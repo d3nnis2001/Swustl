@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swustl/main.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:swustl/views/shared/report_dialog.dart';  
 
 class Message {
   final String senderId;
@@ -216,6 +217,30 @@ class ChatPageState extends State<ChatPage> {
   bool _isCodeMessage = false;
   String _selectedLanguage = 'dart'; 
   
+  void _showReportDialog(BuildContext context) {
+    final match = widget.match;
+    
+    showDialog(
+      context: context,
+      builder: (context) => ReportDialog(
+        itemId: match.id,
+        itemName: match.name,
+        reportType: ReportType.user,
+      ),
+    );
+  }
+  void _reportMessage(Message message) {
+    showDialog(
+      context: context,
+      builder: (context) => ReportDialog(
+        itemId: "${message.senderId}_${message.timestamp.toString()}", // Pseudo ID für die Nachricht
+        itemName: message.text.length > 25 ? "${message.text.substring(0, 25)}..." : message.text,
+        reportType: ReportType.message,
+      ),
+    );
+  }
+
+
   final List<String> _supportedLanguages = [
     'dart', 'javascript', 'python', 'java', 'c', 'cpp', 'csharp',
   ];
@@ -363,6 +388,12 @@ class ChatPageState extends State<ChatPage> {
           ),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.flag_outlined),
+            onPressed: () {
+              _showReportDialog(context);
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.info_outline),
             onPressed: () {
