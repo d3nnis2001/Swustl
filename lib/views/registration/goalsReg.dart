@@ -87,11 +87,11 @@ class _RegistrationPage5State extends State<RegistrationPage5> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Bildplatzhalter
+              // Kleinerer Icon-Bereich
               Center(
                 child: Container(
-                  width: 120,
-                  height: 120,
+                  width: 80, // Reduziert von 120
+                  height: 80, // Reduziert von 120
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
                     shape: BoxShape.circle,
@@ -99,34 +99,34 @@ class _RegistrationPage5State extends State<RegistrationPage5> {
                   child: const Center(
                     child: Icon(
                       Icons.flag,
-                      size: 60,
+                      size: 40, // Reduziert von 60
                       color: Colors.grey,
                     ),
                   ),
                 ),
               ),
               
-              const SizedBox(height: 24),
+              const SizedBox(height: 16), // Reduziert von 24
               
               const Text(
                 'Was sind deine Ziele?',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18, // Reduziert von 20
                   fontWeight: FontWeight.bold,
                 ),
               ),
               
-              const SizedBox(height: 8),
+              const SizedBox(height: 4), // Reduziert von 8
               
               const Text(
-                'Wähle die Ziele aus, die du mit deinen Projekten verfolgen möchtest. Du kannst mehrere auswählen.',
+                'Wähle die Ziele aus, die du mit deinen Projekten verfolgen möchtest.',
                 style: TextStyle(
                   color: Colors.grey,
-                  fontSize: 16,
+                  fontSize: 14, // Reduziert von 16
                 ),
               ),
               
-              const SizedBox(height: 24),
+              const SizedBox(height: 12), // Reduziert von 24
               
               // Vorgegebene Ziele
               Expanded(
@@ -141,13 +141,13 @@ class _RegistrationPage5State extends State<RegistrationPage5> {
                     final isSelected = widget.userData.selectedGoals.contains(title);
                     
                     return Card(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      elevation: isSelected ? 3 : 1,
+                      margin: const EdgeInsets.only(bottom: 8), // Reduziert von 12
+                      elevation: isSelected ? 2 : 1, // Reduziert von 3
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10), // Reduziert von 12
                         side: BorderSide(
                           color: isSelected ? Colors.blue : Colors.transparent,
-                          width: 2,
+                          width: 1.5, // Reduziert von 2
                         ),
                       ),
                       child: InkWell(
@@ -160,25 +160,25 @@ class _RegistrationPage5State extends State<RegistrationPage5> {
                             }
                           });
                         },
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10), // Reduziert von 12
                         child: Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10), // Reduziert von 16
                           child: Row(
                             children: [
                               Container(
-                                width: 48,
-                                height: 48,
+                                width: 36, // Reduziert von 48
+                                height: 36, // Reduziert von 48
                                 decoration: BoxDecoration(
                                   color: isSelected ? Colors.blue.withOpacity(0.1) : Colors.grey.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(24),
+                                  borderRadius: BorderRadius.circular(18), // Angepasst
                                 ),
                                 child: Icon(
                                   icon,
                                   color: isSelected ? Colors.blue : Colors.grey,
-                                  size: 28,
+                                  size: 20, // Reduziert von 28
                                 ),
                               ),
-                              const SizedBox(width: 16),
+                              const SizedBox(width: 12), // Reduziert von 16
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,33 +187,36 @@ class _RegistrationPage5State extends State<RegistrationPage5> {
                                       title,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                        fontSize: 15, // Reduziert von 16
                                         color: isSelected ? Colors.blue : Colors.black,
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
+                                    const SizedBox(height: 2), // Reduziert von 4
                                     Text(
                                       description,
                                       style: TextStyle(
                                         color: Colors.grey[600],
-                                        fontSize: 14,
+                                        fontSize: 13, // Reduziert von 14
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              Checkbox(
-                                value: isSelected,
-                                onChanged: (value) {
-                                  setState(() {
-                                    if (value!) {
-                                      widget.userData.selectedGoals.add(title);
-                                    } else {
-                                      widget.userData.selectedGoals.remove(title);
-                                    }
-                                  });
-                                },
-                                activeColor: Colors.blue,
+                              Transform.scale(
+                                scale: 0.9, // Checkbox etwas kleiner machen
+                                child: Checkbox(
+                                  value: isSelected,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (value!) {
+                                        widget.userData.selectedGoals.add(title);
+                                      } else {
+                                        widget.userData.selectedGoals.remove(title);
+                                      }
+                                    });
+                                  },
+                                  activeColor: Colors.blue,
+                                ),
                               ),
                             ],
                           ),
@@ -224,7 +227,7 @@ class _RegistrationPage5State extends State<RegistrationPage5> {
                 ),
               ),
               
-              const SizedBox(height: 16),
+              const SizedBox(height: 12), // Reduziert von 16
               
               // Eigenes Ziel
               TextFormField(
@@ -233,6 +236,8 @@ class _RegistrationPage5State extends State<RegistrationPage5> {
                   labelText: 'Eigenes Ziel (optional)',
                   border: OutlineInputBorder(),
                   hintText: 'Beschreibe dein eigenes Ziel...',
+                  isDense: true, // Kompaktere Anzeige
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12), // Kompakter
                 ),
                 maxLines: 2,
                 onChanged: (value) {
@@ -258,7 +263,7 @@ class _RegistrationPage5State extends State<RegistrationPage5> {
                   height: 4,
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
-                    color: index <= 1 ? Colors.blue : Colors.grey[300],
+                    color: index <= 4 ? Colors.blue : Colors.grey[300], // Korrigiert von 1 auf 4 für korrekte Anzeige
                     borderRadius: BorderRadius.circular(2),
                   ),
                 );

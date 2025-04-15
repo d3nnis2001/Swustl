@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swustl/models/user_data.dart';
+import 'package:swustl/views/login/login.dart';
 
 class RegistrationPage6 extends StatefulWidget {
   final UserData userData;
@@ -94,11 +95,11 @@ class _RegistrationPage6State extends State<RegistrationPage6> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Bildplatzhalter
+              // Kleinerer Icon-Bereich
               Center(
                 child: Container(
-                  width: 120,
-                  height: 120,
+                  width: 80, // Reduziert von 120
+                  height: 80, // Reduziert von 120
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
                     shape: BoxShape.circle,
@@ -106,34 +107,34 @@ class _RegistrationPage6State extends State<RegistrationPage6> {
                   child: const Center(
                     child: Icon(
                       Icons.link,
-                      size: 60,
+                      size: 40, // Reduziert von 60
                       color: Colors.grey,
                     ),
                   ),
                 ),
               ),
               
-              const SizedBox(height: 24),
+              const SizedBox(height: 16), // Reduziert von 24
               
               const Text(
                 'Social Media & Links',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18, // Reduziert von 20
                   fontWeight: FontWeight.bold,
                 ),
               ),
               
-              const SizedBox(height: 8),
+              const SizedBox(height: 4), // Reduziert von 8
               
               const Text(
-                'Füge Links zu deinen Profilen hinzu, damit andere Projektteilnehmer mehr über dich erfahren können.',
+                'Füge Links zu deinen Profilen hinzu, damit andere mehr über dich erfahren können.',
                 style: TextStyle(
                   color: Colors.grey,
-                  fontSize: 16,
+                  fontSize: 14, // Reduziert von 16
                 ),
               ),
               
-              const SizedBox(height: 24),
+              const SizedBox(height: 12), // Reduziert von 24
               
               // Social Links Formular
               Expanded(
@@ -151,7 +152,7 @@ class _RegistrationPage6State extends State<RegistrationPage6> {
                     }
                     
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 12.0), // Reduziert von 16
                       child: TextFormField(
                         controller: _controllers[key],
                         decoration: InputDecoration(
@@ -159,9 +160,11 @@ class _RegistrationPage6State extends State<RegistrationPage6> {
                           border: const OutlineInputBorder(),
                           hintText: hint,
                           prefixIcon: Icon(icon),
+                          isDense: true, // Kompakteres Layout
+                          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12), // Kompakteres Padding
                           suffixIcon: _controllers[key]!.text.isNotEmpty
                               ? IconButton(
-                                  icon: const Icon(Icons.clear),
+                                  icon: const Icon(Icons.clear, size: 18), // Kleinere Icon-Größe
                                   onPressed: () {
                                     setState(() {
                                       _controllers[key]!.clear();
@@ -192,93 +195,103 @@ class _RegistrationPage6State extends State<RegistrationPage6> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar: Container(
         color: Colors.white,
-        elevation: 8,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Progress Indicator
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(6, (index) {
-                  return Container(
-                    width: 40,
-                    height: 4,
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    decoration: BoxDecoration(
-                      color: index <= 5 ? Colors.blue : Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  );
-                }),
-              ),
-              
-              const SizedBox(height: 16),
-              
-              // Navigation Buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.black, backgroundColor: Colors.grey[200],
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.arrow_back, size: 16),
-                        SizedBox(width: 8),
-                        Text('Zurück'),
-                      ],
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Progress Indicator
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(6, (index) {
+                return Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    color: index <= 5 ? Colors.blue : Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                );
+              }),
+            ),
+            
+            const SizedBox(height: 16),
+            
+            // Navigation Buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black, 
+                    backgroundColor: Colors.grey[200],
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_validateForm()) {
-                        // Hier kannst du die Registrierung abschließen
-                        // z.B. Daten an die API senden oder zur Hauptseite navigieren
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Registrierung abgeschlossen'),
-                            content: const Text('Dein Profil wurde erfolgreich erstellt!'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  // Hier zur Hauptseite oder Login navigieren
-                                  Navigator.of(context).popUntil((route) => route.isFirst);
-                                },
-                                child: const Text('Zum Login'),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white, backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Registrierung abschließen'),
-                        SizedBox(width: 8),
-                        Icon(Icons.check, size: 16),
-                      ],
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.arrow_back, size: 16),
+                      SizedBox(width: 8),
+                      Text('Zurück'),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_validateForm()) {
+                      // Hier kannst du die Registrierung abschließen
+                      // z.B. Daten an die API senden oder zur Hauptseite navigieren
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Registrierung abgeschlossen'),
+                          content: const Text('Dein Profil wurde erfolgreich erstellt!'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                // Hier zur Hauptseite oder Login navigieren
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginPage(),
+                                  ),
+                                );
+                              },
+                              child: const Text('Zum Login'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, 
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Abschließen'),
+                      SizedBox(width: 8),
+                      Icon(Icons.check, size: 16),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
