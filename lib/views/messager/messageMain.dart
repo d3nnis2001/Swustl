@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:swustl/main.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 
 class Message {
   final String senderId;
   final String receiverId;
   final String text;
   final DateTime timestamp;
+  final bool isCode;
+  final String language;
 
   Message({
     required this.senderId,
     required this.receiverId,
     required this.text,
     required this.timestamp,
+    this.isCode = false,
+    this.language = 'dart',
   });
 }
 
@@ -206,9 +212,14 @@ class ChatPage extends StatefulWidget {
 class ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final String currentUserId = 'currentUser'; // Normalerweise aus Authentifizierung
+  final String currentUserId = 'currentUser';
+  bool _isCodeMessage = false;
+  String _selectedLanguage = 'dart'; 
   
-  // Beispiel-Chat-Nachrichten
+  final List<String> _supportedLanguages = [
+    'dart', 'javascript', 'python', 'java', 'c', 'cpp', 'csharp',
+  ];
+  
   List<Message> messages = [];
 
   @override
@@ -246,6 +257,36 @@ class ChatPageState extends State<ChatPage> {
       Message(
         senderId: widget.match.id,
         receiverId: currentUserId,
+        text: 'Hier ist ein Beispiel für die Architektur:',
+        timestamp: now.subtract(const Duration(minutes: 20)),
+      ),
+      Message(
+        senderId: widget.match.id,
+        receiverId: currentUserId,
+        text: '''class ApiService {
+  final String baseUrl;
+  final http.Client client;
+  
+  ApiService({required this.baseUrl, http.Client? client})
+      : client = client ?? http.Client();
+      
+  Future<List<Product>> getProducts() async {
+    final response = await client.get(Uri.parse('\$baseUrl/products'));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => Product.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
+}''',
+        timestamp: now.subtract(const Duration(minutes: 15)),
+        isCode: true,
+        language: 'dart',
+      ),
+      Message(
+        senderId: widget.match.id,
+        receiverId: currentUserId,
         text: widget.match.lastMessage,
         timestamp: widget.match.lastMessageTime,
       ),
@@ -277,8 +318,12 @@ class ChatPageState extends State<ChatPage> {
           receiverId: widget.match.id,
           text: _messageController.text.trim(),
           timestamp: DateTime.now(),
+          isCode: _isCodeMessage,
+          language: _selectedLanguage,
         ),
       );
+      // Nach dem Senden einer Nachricht zurück zum normalen Textmodus
+      _isCodeMessage = false;
     });
 
     _messageController.clear();
@@ -344,6 +389,7 @@ class ChatPageState extends State<ChatPage> {
                     mainAxisAlignment: isCurrentUser 
                         ? MainAxisAlignment.end 
                         : MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (!isCurrentUser) ...[
                         CircleAvatar(
@@ -354,33 +400,102 @@ class ChatPageState extends State<ChatPage> {
                       ],
                       Flexible(
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16, 
-                            vertical: 10,
-                          ),
+                          padding: message.isCode 
+                              ? const EdgeInsets.all(2)  // Weniger Padding für Code
+                              : const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color: isCurrentUser 
-                                ? Colors.blue 
-                                : Colors.grey.shade200,
+                            color: message.isCode
+                                ? Colors.grey.shade900
+                                : isCurrentUser 
+                                    ? Colors.blue 
+                                    : Colors.grey.shade200,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                message.text,
-                                style: TextStyle(
-                                  color: isCurrentUser ? Colors.white : Colors.black,
-                                  fontSize: 15,
+                              if (message.isCode) ...[
+                                // Code-Nachricht mit Syntax-Highlighting
+                                Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(14),
+                                      child: SyntaxView(
+                                        code: message.text,
+                                        syntax: _getSyntaxForLanguage(message.language),
+                                        syntaxTheme: SyntaxTheme.dracula(),
+                                        fontSize: 12.0,
+                                        withZoom: false,
+                                        withLinesCount: true,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 4,
+                                      right: 4,
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey.shade800,
+                                              borderRadius: BorderRadius.circular(12),
+                                            ),
+                                            child: Text(
+                                              message.language.toUpperCase(),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          InkWell(
+                                            onTap: () {
+                                              Clipboard.setData(ClipboardData(text: message.text));
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                const SnackBar(
+                                                  content: Text('Code in die Zwischenablage kopiert'),
+                                                  duration: Duration(seconds: 2),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(4),
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.shade800,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: const Icon(
+                                                Icons.copy,
+                                                color: Colors.white,
+                                                size: 12,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
+                              ] else
+                                // Normale Textnachricht
+                                Text(
+                                  message.text,
+                                  style: TextStyle(
+                                    color: isCurrentUser ? Colors.white : Colors.black,
+                                    fontSize: 15,
+                                  ),
+                                ),
                               const SizedBox(height: 2),
                               Text(
                                 _formatTimestamp(message.timestamp),
                                 style: TextStyle(
-                                  color: isCurrentUser 
-                                      ? Colors.white.withOpacity(0.7) 
-                                      : Colors.black54,
+                                  color: message.isCode 
+                                      ? Colors.grey
+                                      : isCurrentUser 
+                                          ? Colors.white.withOpacity(0.7) 
+                                          : Colors.black54,
                                   fontSize: 11,
                                 ),
                               ),
@@ -395,6 +510,63 @@ class ChatPageState extends State<ChatPage> {
               },
             ),
           ),
+          
+          // Code-Modus Anzeige
+          if (_isCodeMessage)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              color: Colors.grey.shade900,
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.code,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Code-Modus: $_selectedLanguage',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  // Dropdown für Sprache
+                  DropdownButton<String>(
+                    value: _selectedLanguage,
+                    dropdownColor: Colors.grey.shade800,
+                    underline: Container(),
+                    icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          _selectedLanguage = newValue;
+                        });
+                      }
+                    },
+                    items: _supportedLanguages
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: () {
+                      setState(() {
+                        _isCodeMessage = false;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
           
           // Nachrichteneingabe
           Container(
@@ -412,6 +584,20 @@ class ChatPageState extends State<ChatPage> {
             child: SafeArea(
               child: Row(
                 children: [
+                  // Code-Toggle-Button
+                  IconButton(
+                    icon: Icon(
+                      Icons.code,
+                      color: _isCodeMessage 
+                          ? Colors.blue
+                          : Colors.grey.shade600,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isCodeMessage = !_isCodeMessage;
+                      });
+                    },
+                  ),
                   IconButton(
                     icon: const Icon(Icons.attachment_outlined),
                     color: Colors.grey.shade600,
@@ -428,12 +614,18 @@ class ChatPageState extends State<ChatPage> {
                       ),
                       child: TextField(
                         controller: _messageController,
-                        decoration: const InputDecoration(
-                          hintText: 'Nachricht schreiben...',
+                        decoration: InputDecoration(
+                          hintText: _isCodeMessage
+                              ? 'Code hier eingeben...'
+                              : 'Nachricht schreiben...',
                           border: InputBorder.none,
                           hintStyle: TextStyle(color: Colors.grey),
                         ),
-                        textCapitalization: TextCapitalization.sentences,
+                        textCapitalization: _isCodeMessage
+                            ? TextCapitalization.none
+                            : TextCapitalization.sentences,
+                        maxLines: _isCodeMessage ? 4 : 1,
+                        minLines: 1,
                         onSubmitted: (_) => _sendMessage(),
                       ),
                     ),
@@ -450,6 +642,28 @@ class ChatPageState extends State<ChatPage> {
         ],
       ),
     );
+  }
+
+  Syntax _getSyntaxForLanguage(String language) {
+    switch (language.toLowerCase()) {
+      case 'javascript':
+      case 'js':
+        return Syntax.JAVASCRIPT;
+      case 'dart':
+        return Syntax.DART;
+      case 'python':
+      case 'py':
+        return Syntax.PYTHON;
+      case 'java':
+        return Syntax.JAVA;
+      case 'c':
+        return Syntax.C;
+      case 'cpp':
+      case 'c++':
+        return Syntax.CPP;
+      default:
+        return Syntax.DART;
+    }
   }
 
   void _showProfileModal(BuildContext context) {
