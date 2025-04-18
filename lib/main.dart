@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:swustl/views/messager/messageMain.dart';
-import 'package:swustl/views/profile/profile_screen.dart';
+import 'package:swustl/views/profile/profile_screen_updated.dart';
 import 'package:swustl/models/user_data.dart';
 import 'package:swustl/views/shared/report_dialog.dart';
+import 'package:swustl/views/hackathon/hackathon_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,20 +15,96 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Project Match',
+      title: 'TechMate',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const HomePage(),
+      home: const MainNavigationScreen(),
       debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+// Neue Hauptnavigationsklasse mit Bottom Navigation Bar
+class MainNavigationScreen extends StatefulWidget {
+  const MainNavigationScreen({super.key});
+
+  @override
+  MainNavigationScreenState createState() => MainNavigationScreenState();
+}
+
+class MainNavigationScreenState extends State<MainNavigationScreen> {
+  int _selectedIndex = 0;
+  
+  // Erstelle den UserData-Objekt, der im gesamten App geteilt wird
+  final UserData userData = UserData();
+
+  @override
+  Widget build(BuildContext context) {
+    // Liste der Screens für die Navigation
+    final List<Widget> screens = [
+      const HomePage(), // Projekt-Swipe (Home)
+      const HackathonScreen(), // Hackathon-Suche
+      const MessagesPage(), // Nachrichten
+      ProfileScreen(userData: userData), // Profil
+    ];
+
+    return Scaffold(
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: screens,
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Projekte',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.event),
+              label: 'Hackathons',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message),
+              label: 'Nachrichten',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profil',
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
 
   @override
   HomePageState createState() => HomePageState();
@@ -129,37 +206,14 @@ class HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.person, size: 28),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfileScreen(userData: UserData()),
-                        ),
-                      );
-                    },
-                  ),
                   Image.asset(
                     'assets/logo.png', 
                     height: 40,
                     // Platzhalter für Logo
                     errorBuilder: (context, error, stackTrace) => 
                       const Icon(Icons.handshake, size: 32, color: Colors.blue),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.message, size: 28),
-                    onPressed: () {
-                      // Navigiere zu Nachrichten
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MessagesPage(),
-                        ),
-                      );
-                    },
                   ),
                 ],
               ),
