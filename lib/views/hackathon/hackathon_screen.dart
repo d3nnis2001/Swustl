@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:swustl/views/shared/report_dialog.dart';
 import 'package:swustl/models/hackathon_data.dart';
+import 'package:swustl/models/hackathon_filter.dart';
+import 'package:swustl/views/hackathon/hackathon_filter_dialog.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HackathonScreen extends StatefulWidget {
   const HackathonScreen({super.key});
@@ -13,32 +16,14 @@ class HackathonScreenState extends State<HackathonScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   final HackathonService _hackathonService = HackathonService();
-  bool _showOnlyVirtual = false;
-  bool _showOnlyInPerson = false;
+  final HackathonFilter _filter = HackathonFilter();
+  final HackathonFilterDialog _filterDialog = HackathonFilterDialog();
   
   List<HackathonEvent> get filteredHackathons {
-    List<HackathonEvent> result;
-    
-    if (_showOnlyVirtual) {
-      result = _hackathonService.getVirtualHackathons();
-    } else if (_showOnlyInPerson) {
-      result = _hackathonService.getInPersonHackathons();
-    } else {
-      result = _hackathonService.getAllHackathons();
-    }
-    
-    if (_searchQuery.isEmpty) {
-      return result;
-    }
-    
-    final searchLower = _searchQuery.toLowerCase();
-    return result.where((hackathon) =>
-      hackathon.title.toLowerCase().contains(searchLower) ||
-      hackathon.description.toLowerCase().contains(searchLower) ||
-      hackathon.location.toLowerCase().contains(searchLower) ||
-      hackathon.technologies.any((tech) => 
-          tech.toLowerCase().contains(searchLower))
-    ).toList();
+    return _filter.applyFilters(
+      _hackathonService.getAllHackathons(),
+      _searchQuery
+    );
   }
   
   void _showReportHackathonDialog(BuildContext context, HackathonEvent hackathon) {
@@ -52,117 +37,18 @@ class HackathonScreenState extends State<HackathonScreen> {
     );
   }
   
-  void _showFilterDialog(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Filter',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Event-Typ',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  CheckboxListTile(
-                    title: const Text('Nur virtuelle Events'),
-                    value: _showOnlyVirtual,
-                    activeColor: Colors.blue,
-                    onChanged: (value) {
-                      setState(() {
-                        _showOnlyVirtual = value ?? false;
-                        if (_showOnlyVirtual) {
-                          _showOnlyInPerson = false;
-                        }
-                      });
-                    },
-                    contentPadding: EdgeInsets.zero,
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                  CheckboxListTile(
-                    title: const Text('Nur Vor-Ort-Events'),
-                    value: _showOnlyInPerson,
-                    activeColor: Colors.blue,
-                    onChanged: (value) {
-                      setState(() {
-                        _showOnlyInPerson = value ?? false;
-                        if (_showOnlyInPerson) {
-                          _showOnlyVirtual = false;
-                        }
-                      });
-                    },
-                    contentPadding: EdgeInsets.zero,
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            setState(() {
-                              _showOnlyVirtual = false;
-                              _showOnlyInPerson = false;
-                            });
-                          },
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            side: BorderSide(color: Colors.grey.shade300),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text('Zurücksetzen'),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            this.setState(() {}); // Aktualisiere den Hauptbildschirm
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text(
-                            'Filter anwenden',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
+  void _openFilterDialog() async {
+    final result = await _filterDialog.showFilterDialog(context, _filter);
+    if (result != null) {
+      setState(() {
+        // Apply the new filter
+        _filter.showOnlyVirtual = result.showOnlyVirtual;
+        _filter.showOnlyInPerson = result.showOnlyInPerson;
+        _filter.selectedLocation = result.selectedLocation;
+        _filter.selectedDateRange = result.selectedDateRange;
+        _filter.selectedTechnologies = result.selectedTechnologies;
+      });
+    }
   }
 
   @override
@@ -183,11 +69,28 @@ class HackathonScreenState extends State<HackathonScreen> {
         elevation: 0,
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: () {
-              _showFilterDialog(context);
-            },
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.filter_list),
+                onPressed: _openFilterDialog,
+              ),
+              // Show indicator if filters are active
+              if (_filter.isActive)
+                Positioned(
+                  top: 12,
+                  right: 12,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Colors.blue,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+            ],
           ),
         ],
       ),
@@ -231,6 +134,58 @@ class HackathonScreenState extends State<HackathonScreen> {
             ),
           ),
           
+          // Aktive Filter anzeigen
+          if (_filter.isActive)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    if (_filter.showOnlyVirtual)
+                      _buildFilterChip('Virtuell', () {
+                        setState(() {
+                          _filter.showOnlyVirtual = false;
+                        });
+                      }),
+                    if (_filter.showOnlyInPerson)
+                      _buildFilterChip('Vor Ort', () {
+                        setState(() {
+                          _filter.showOnlyInPerson = false;
+                        });
+                      }),
+                    if (_filter.selectedLocation != 'Alle')
+                      _buildFilterChip(_filter.selectedLocation, () {
+                        setState(() {
+                          _filter.selectedLocation = 'Alle';
+                        });
+                      }),
+                    if (_filter.selectedDateRange != 'Alle')
+                      _buildFilterChip(_filter.selectedDateRange, () {
+                        setState(() {
+                          _filter.selectedDateRange = 'Alle';
+                        });
+                      }),
+                    ..._filter.selectedTechnologies.map((tech) => 
+                      _buildFilterChip(tech, () {
+                        setState(() {
+                          _filter.selectedTechnologies.remove(tech);
+                        });
+                      }),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _filter.reset();
+                        });
+                      },
+                      child: const Text('Alle zurücksetzen'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          
           // Liste der Hackathons
           Expanded(
             child: filteredHackathons.isEmpty
@@ -266,6 +221,21 @@ class HackathonScreenState extends State<HackathonScreen> {
       ),
     );
   }
+  
+  Widget _buildFilterChip(String label, VoidCallback onRemove) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: Chip(
+        label: Text(label),
+        deleteIcon: const Icon(Icons.close, size: 16),
+        onDeleted: onRemove,
+        backgroundColor: Colors.blue.withOpacity(0.1),
+        labelStyle: const TextStyle(fontSize: 12),
+        visualDensity: VisualDensity.compact,
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+    );
+  }
 }
 
 class HackathonCard extends StatelessWidget {
@@ -277,6 +247,22 @@ class HackathonCard extends StatelessWidget {
     required this.hackathon,
     required this.onReport,
   });
+
+  void _shareHackathon(BuildContext context, HackathonEvent hackathon) {
+    final String shareText = '''
+    ${hackathon.title}
+📅   ${hackathon.date}
+📍   ${hackathon.location}
+🔧   ${hackathon.technologies.join(', ')}
+    ${hackathon.description}
+
+    Veranstalter: ${hackathon.organizerName}
+
+    Entdeckt auf Swustl - Deine Projektfinder-App!
+    ''';
+
+    Share.share(shareText, subject: 'Spannender Hackathon: ${hackathon.title}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -367,14 +353,9 @@ class HackathonCard extends StatelessWidget {
                             title: const Text('Teilen'),
                             onTap: () {
                               Navigator.pop(context);
-                              // Sharing-Logik hier implementieren
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Teilen-Funktion nicht implementiert'),
-                                ),
-                              );
+                              _shareHackathon(context, hackathon);
                             },
-                          ),
+                          ),  
                         ],
                       ),
                     );
@@ -654,12 +635,16 @@ class HackathonCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Icon(Icons.group, size: 18),
-                          const SizedBox(width: 8),
                           Text(
                             hackathon.organizerName,
                             style: const TextStyle(fontSize: 16),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.share, color: Colors.blue),
+                            onPressed: () => _shareHackathon(context, hackathon),
+                            tooltip: 'Teilen',
                           ),
                         ],
                       ),
