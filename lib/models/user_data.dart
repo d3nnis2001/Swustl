@@ -2,6 +2,7 @@ import 'package:swustl/models/icebreaker_data.dart';
 
 class UserData {
   // Page 1: Personal Information
+  String id = '';
   String firstName = '';
   String lastName = '';
   String username = '';
@@ -12,7 +13,7 @@ class UserData {
   String phoneNumber = '';
   String? profileImagePath; // Added for custom profile image
   String? avatarPath; // Added for predefined avatar selection
-  
+  String? profileImageUrl;
   // Page 2: Education
   List<Education> education = [];
   

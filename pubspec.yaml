@@ -36,6 +36,8 @@ dependencies:
   cloud_firestore: ^4.8.4
   firebase_storage: ^11.2.5
   firebase_messaging: ^14.6.5
+  google_sign_in: ^6.0.2
+  flutter_local_notifications: ^13.0.0
   flutter:
     sdk: flutter
 

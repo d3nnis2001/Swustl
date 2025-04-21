@@ -4,8 +4,14 @@ import 'package:swustl/views/profile/profile_screen_updated.dart';
 import 'package:swustl/models/user_data.dart';
 import 'package:swustl/views/shared/report_dialog.dart';
 import 'package:swustl/views/hackathon/hackathon_screen.dart';
+import 'package:swustl/services/firebase/firebase_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Firebase initialisieren
+  await FirebaseService().initialize();
+  
   runApp(const MyApp());
 }
 
