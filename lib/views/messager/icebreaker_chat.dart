@@ -173,10 +173,10 @@ class IcebreakerChatWidget extends StatelessWidget {
   
   String _generateIcebreakerMessage(IcebreakerQuestion question, String theirAnswer) {
     final List<String> openers = [
-      "Ich habe gesehen, dass du bei \"${question.question}\" geantwortet hast: \"${theirAnswer}\". Dazu würde ich gerne mehr erfahren!",
-      "\"${theirAnswer}\" - Das fand ich interessant als Antwort auf \"${question.question}\". Was genau meinst du damit?",
+      "Ich habe gesehen, dass du bei \"${question.question}\" geantwortet hast: \"$theirAnswer\". Dazu würde ich gerne mehr erfahren!",
+      "\"$theirAnswer\" - Das fand ich interessant als Antwort auf \"${question.question}\". Was genau meinst du damit?",
       "Hey! Mir ist aufgefallen, dass du zu \"${question.question}\" eine ähnliche Meinung hast. Lass uns darüber sprechen!",
-      "Deine Antwort \"${theirAnswer}\" auf die Frage \"${question.question}\" hat mich neugierig gemacht. Magst du mir mehr dazu erzählen?",
+      "Deine Antwort \"$theirAnswer\" auf die Frage \"${question.question}\" hat mich neugierig gemacht. Magst du mir mehr dazu erzählen?",
     ];
     
     // Zufällige Eröffnung wählen

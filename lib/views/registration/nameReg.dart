@@ -129,7 +129,7 @@ class _RegistrationPage1State extends State<RegistrationPage1> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Wähle einen Avatar'),
-          content: Container(
+          content: SizedBox(
             width: double.maxFinite,
             height: 250,
             child: GridView.builder(

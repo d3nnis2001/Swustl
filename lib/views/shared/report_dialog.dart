@@ -28,7 +28,7 @@ class _ReportDialogState extends State<ReportDialog> {
   bool _isSubmitting = false;
   
   // Vordefinierte Gründe für verschiedene Report-Typen
-  Map<ReportType, List<String>> _reportReasons = {
+  final Map<ReportType, List<String>> _reportReasons = {
     ReportType.user: [
       'Fake-Profil',
       'Beleidigendes Verhalten',
@@ -143,7 +143,7 @@ class _ReportDialogState extends State<ReportDialog> {
                 contentPadding: EdgeInsets.zero,
                 dense: true,
               ),
-            ).toList(),
+            ),
             
             const SizedBox(height: 16),
             const Text(

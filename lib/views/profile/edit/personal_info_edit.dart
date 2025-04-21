@@ -133,7 +133,7 @@ class _PersonalInfoEditScreenState extends State<PersonalInfoEditScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Wähle einen Avatar'),
-          content: Container(
+          content: SizedBox(
             width: double.maxFinite,
             height: 250,
             child: GridView.builder(

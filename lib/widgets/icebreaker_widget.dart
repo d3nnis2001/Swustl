@@ -171,7 +171,7 @@ class IcebreakerWidget extends StatelessWidget {
   ) {
     final TextEditingController answerController = TextEditingController();
     
-    void _saveAnswer(String answer) {
+    void saveAnswer(String answer) {
       userData.answerIcebreaker(question.id, answer);
       if (onAnswered != null) {
         onAnswered!();
@@ -219,7 +219,7 @@ class IcebreakerWidget extends StatelessWidget {
                 children: question.predefinedAnswers.map((predefinedAnswer) => 
                   InkWell(
                     onTap: () {
-                      _saveAnswer(predefinedAnswer);
+                      saveAnswer(predefinedAnswer);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -249,7 +249,7 @@ class IcebreakerWidget extends StatelessWidget {
                     ),
                     onSubmitted: (value) {
                       if (value.isNotEmpty) {
-                        _saveAnswer(value);
+                        saveAnswer(value);
                         answerController.clear();
                       }
                     },
@@ -260,7 +260,7 @@ class IcebreakerWidget extends StatelessWidget {
                   onPressed: () {
                     final answer = answerController.text.trim();
                     if (answer.isNotEmpty) {
-                      _saveAnswer(answer);
+                      saveAnswer(answer);
                       answerController.clear();
                     }
                   },

@@ -143,7 +143,7 @@ class ProfilePreviewWidget extends StatelessWidget {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
           
           // Button zum Anzeigen des vollständigen Profils
