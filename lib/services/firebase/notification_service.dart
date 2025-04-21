@@ -57,9 +57,6 @@ class NotificationService {
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
-      onDidReceiveLocalNotification: (id, title, body, payload) async {
-        // iOS 10+ wird diese Callback-Methode nicht aufrufen
-      }
     );
     
     final InitializationSettings initSettings = InitializationSettings(

@@ -28,16 +28,17 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  image_picker: ^0.8.6
+  image_picker: ^1.1.2
   flutter_syntax_view: ^4.0.0
-  share_plus: ^7.2.1
-  firebase_core: ^2.15.0
-  firebase_auth: ^4.7.2
-  cloud_firestore: ^4.8.4
-  firebase_storage: ^11.2.5
-  firebase_messaging: ^14.6.5
+  share_plus: ^10.1.4
+  firebase_core: ^3.13.0
+  firebase_auth: ^5.5.2
+  cloud_firestore: ^5.6.6
+  firebase_storage: ^12.4.5
+  firebase_messaging: ^15.2.5
   google_sign_in: ^6.0.2
-  flutter_local_notifications: ^13.0.0
+  firebase_data_connect: ^0.1.0
+  flutter_local_notifications: ^19.1.0
   flutter:
     sdk: flutter
 
