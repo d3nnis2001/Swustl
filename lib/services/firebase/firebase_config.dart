@@ -30,19 +30,21 @@ class FirebaseConfig {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'YOUR_API_KEY',
-    appId: 'YOUR_APP_ID',
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
-    projectId: 'YOUR_PROJECT_ID',
-    storageBucket: 'YOUR_STORAGE_BUCKET',
-    iosClientId: 'YOUR_IOS_CLIENT_ID',
-    iosBundleId: 'YOUR_IOS_BUNDLE_ID',
+    apiKey: 'AIzaSyAsk6_LBBTOwQxYe9Mq1v2iE4if5L1xxWc',
+    appId: '1:570594449302:ios:0dd18d7fdd72f972d36fb7',
+    messagingSenderId: '570594449302',
+    projectId: 'swustl-abaf1',
+    storageBucket: 'swustl-abaf1.firebasestorage.app',
+    iosClientId: '',
+    iosBundleId: 'com.example.swustl',
   );
 
   // Initialisierung von Firebase
   static Future<void> init() async {
-    await Firebase.initializeApp(
-      options: currentPlatform,
-    );
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: currentPlatform,
+      );
+    }
   }
 }

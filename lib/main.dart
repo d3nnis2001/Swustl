@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:swustl/views/messager/messageMain.dart';
 import 'package:swustl/views/profile/profile_screen_updated.dart';
@@ -5,12 +6,16 @@ import 'package:swustl/models/user_data.dart';
 import 'package:swustl/views/shared/report_dialog.dart';
 import 'package:swustl/views/hackathon/hackathon_screen.dart';
 import 'package:swustl/services/firebase/firebase_service.dart';
+import 'package:swustl/services/firebase/firebase_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Firebase initialisieren
-  await FirebaseService().initialize();
+  /*
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      options: FirebaseConfig.currentPlatform,
+    );
+  } */
   
   runApp(const MyApp());
 }

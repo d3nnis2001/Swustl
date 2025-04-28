@@ -7,6 +7,7 @@ import 'package:swustl/services/firebase/report_service.dart';
 import 'package:swustl/services/firebase/storage_service.dart';
 import 'package:swustl/services/firebase/notification_service.dart';
 import 'package:swustl/services/firebase/firebase_config.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 // Zentrale Klasse, die alle Firebase-Services bündelt
 class FirebaseService {
@@ -33,8 +34,10 @@ class FirebaseService {
     
     try {
       // Firebase Core initialisieren
-      await FirebaseConfig.init();
-      
+      if (Firebase.apps.isEmpty) {
+          await FirebaseConfig.init();
+      }
+
       // Services initialisieren
       auth = AuthService();
       users = UserService();

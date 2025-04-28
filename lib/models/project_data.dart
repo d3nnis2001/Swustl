@@ -44,7 +44,7 @@ class ProjectData {
     required this.projectType,
     required this.lookingFor,
     DateTime? createdAt,
-  }) : this.createdAt = createdAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now();
   
   // Erstelle eine leere Projektinstanz
   factory ProjectData.empty() {
